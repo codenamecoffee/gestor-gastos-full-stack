@@ -177,13 +177,13 @@ However, **future versions** will include:
 
 ## 🧭 Roadmap & Project Management
 
-> Development progress is managed through a [GitHub Project Board](https://github.com/users/codenamecoffee/projects/1/views/1),
+> Development progress is managed through a [GitHub Project Board](https://github.com/users/codenamecoffee/projects/1/views/2),
 organized under a **Kanban workflow** (Backlog → To Do (Current Sprint) → In Progress → Review/QA → Done).
 > Complementarily, [GitHub Milestones](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestones?sort=due_date&direction=asc)
 define the **project’s strategic goals** over short, medium, and long-term phases.
 
 
-### 🔹[Milestone 1](https://github.com/codenamecoffee/GestorGastos_FullStack/milestone/1) : Short-Term Goals (next 2 weeks)
+### 🔹[Milestone 1](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestone/1) : Short-Term Goals (next 2 weeks)
 
 * 🧩 Implement Main Component — Corkboard
   - Foundation of the visual interface where all widgets will live.
@@ -219,7 +219,7 @@ define the **project’s strategic goals** over short, medium, and long-term pha
 
 ---
 
-### 🔹[Milestone 2](https://github.com/codenamecoffee/GestorGastos_FullStack/milestone/2) : Medium-Term Goals (next 4 weeks)
+### 🔹[Milestone 2](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestone/2) : Medium-Term Goals (next 4 weeks)
 
 * 🧰 Widget System Expansion
   - Implement multiple interactive widgets:
@@ -253,7 +253,7 @@ define the **project’s strategic goals** over short, medium, and long-term pha
 
 ---
 
-### 🔹[Milestone 3](https://github.com/codenamecoffee/GestorGastos_FullStack/milestone/3) : Long-Term Goals (next 2 months)
+### 🔹[Milestone 3](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestone/3) : Long-Term Goals (next 2 months)
 
 - 🤖 AI-Enhanced Features
     - Transaction recording via camera + AI (optical and contextual recognition).
@@ -309,6 +309,6 @@ This project is licensed under the MIT License — see the [LICENSE](./LICENSE)
 
 ## 🛠️ Useful Links
 
-- [GitHub Milestones](https://github.com/codenamecoffee/GestorGastos_FullStack/milestones)
-- [GitHub Project Board](https://github.com/users/codenamecoffee/projects/1/views/1)
-- [Repository](https://github.com/codenamecoffee/GestorGastos_FullStack)
+- [GitHub Milestones](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestones?sort=due_date&direction=asc)
+- [GitHub Project Board](https://github.com/users/codenamecoffee/projects/1/views/2)
+- [Repository](https://github.com/codenamecoffee/gestor-gastos-full-stack)
