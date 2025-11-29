@@ -179,7 +179,7 @@ However, **future versions** will include:
 
 > Development progress is managed through a [GitHub Project Board](https://github.com/users/codenamecoffee/projects/1/views/1),
 organized under a **Kanban workflow** (Backlog → To Do (Current Sprint) → In Progress → Review/QA → Done).
-> Complementarily, [GitHub Milestones](https://github.com/codenamecoffee/GestorGastos_FullStack/milestones)
+> Complementarily, [GitHub Milestones](https://github.com/codenamecoffee/gestor-gastos-full-stack/milestones?sort=due_date&direction=asc)
 define the **project’s strategic goals** over short, medium, and long-term phases.
 
 
