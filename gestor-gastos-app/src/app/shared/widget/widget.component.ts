@@ -39,6 +39,11 @@ export class WidgetComponent implements OnInit{
   private startTop = 0;
   private dragOffset = { x: 0, y: 0 };
 
+  get bodyHeight(): number {
+    const headerHeight = 36;
+    return this.size.height - headerHeight;
+  }
+
   // Dragging:
   startDrag(event: MouseEvent) {
     if (!(event.target as HTMLElement).classList.contains('widget-header')) return;

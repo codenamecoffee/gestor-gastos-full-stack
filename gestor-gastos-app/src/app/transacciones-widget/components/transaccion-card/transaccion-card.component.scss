@@ -13,6 +13,7 @@
   flex: 1; // La card se expande para llenar el espacio
   display: flex;
   flex-direction: column;
+  margin: 0.5rem;
 }
 
 .card-header {
@@ -26,15 +27,15 @@
   transition: opacity 0.2s ease;
 }
 
-.card-header {
-  // Estilos adicionales a futuro.
-}
+// .card-header {
+//   // Estilos adicionales a futuro.
+// }
 
 .card-body {
   // Estilos adicionales a futuro.
   flex: 1;
 }
 
-.card-footer {
-  // Estilos adicionales a futuro.
-}
+// .card-footer {
+//   // Estilos adicionales a futuro.
+// }

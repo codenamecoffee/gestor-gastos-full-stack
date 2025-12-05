@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,  Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -26,6 +26,8 @@ export class TransaccionesWidgetComponent implements OnInit {
   // En transacciones-container se agregó el atributo #contenedorTransacciones 
   @ViewChild('contenedorTransacciones', { static: false })
   contenedorTransacciones!: ElementRef;
+
+  @Input() bodyHeight!: number;
 
   transacciones: Transaccion[] = []; // arreglo para guardar lo que venga de la API
   mostrarFormulario: boolean = false;
