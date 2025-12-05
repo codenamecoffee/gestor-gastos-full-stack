@@ -1,7 +1,7 @@
 <h2>Lista de transacciones</h2>
 
-<app-widget title="Transacciones" [minWidth]="285" [minHeight]="378">
-  <div class="transacciones-widget-content">
+<app-widget title="Transacciones" [minWidth]="285" [minHeight]="378" #widgetRef>
+  <div class="transacciones-widget-content" [style.height.px]="widgetRef.bodyHeight">
     <div class="acciones">
       <app-transacciones-actions
         [mostrarFormulario]="mostrarFormulario"
