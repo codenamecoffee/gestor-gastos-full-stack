@@ -98,7 +98,7 @@ export class TransaccionesWidgetComponent implements OnInit {
     ).subscribe({
       next: data => {
         this.transacciones = data;
-        setTimeout(() => this.scrollToTop(), 100); // Delay para que el DOM se actualice
+        // setTimeout(() => this.scrollToTop(), 100); // Delay para que el DOM se actualice
       },
       error: err => console.error('Error en búsqueda en tiempo real', err)
     });
@@ -125,7 +125,7 @@ export class TransaccionesWidgetComponent implements OnInit {
   cargarTransacciones(): void {
     this.transaccionService.obtenerTodas().subscribe(data => {
       this.transacciones = data;
-      setTimeout(() => this.scrollToTop(), 100);
+      // setTimeout(() => this.scrollToTop(), 100);
     });
   }
 
@@ -370,6 +370,7 @@ export class TransaccionesWidgetComponent implements OnInit {
       hasta: '',
       mimeType: ''
     };
+    setTimeout(() => this.scrollToTop(), 100);
     this.cargarTransacciones(); // vuelve al listado completo
   }
 
