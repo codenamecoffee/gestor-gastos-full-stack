@@ -104,6 +104,15 @@ export class TransaccionesWidgetComponent implements OnInit {
     });
   }
 
+  private refreshTransactionsWithFiltersIfNeeded(): void {
+    const hayFiltros = Object.values(this.filtros).some(valor => !!valor);
+    if (hayFiltros || this.mostrarBuscador) {
+      this.onFiltroChange();
+    } else {
+      this.cargarTransacciones();
+    }
+  }
+
   private scrollToTop(): void {  // Apunta al div transacciones-container
     if (this.contenedorTransacciones?.nativeElement) {
       this.contenedorTransacciones.nativeElement.scrollTo({
@@ -111,7 +120,7 @@ export class TransaccionesWidgetComponent implements OnInit {
         behavior: 'smooth'
       });
     }
-  } // Para mi este método no funciona bien. Pero bueno.
+  }
 
   cargarTransacciones(): void {
     this.transaccionService.obtenerTodas().subscribe(data => {
@@ -240,13 +249,9 @@ export class TransaccionesWidgetComponent implements OnInit {
       formData.append('ActualizarComprobante', 'false');
     }
 
-    //if (!this.usarFechaPersonalizada) {
-    //  formData.delete('fecha');
-    //}
-
     this.transaccionService.actualizar(this.editingId, formData).subscribe({
       next: () => {
-        this.cargarTransacciones();
+        this.refreshTransactionsWithFiltersIfNeeded();
         this.mostrarFormulario = false;
         this.editingId = null;
         this.tieneComprobanteExistente = false;
@@ -286,7 +291,7 @@ export class TransaccionesWidgetComponent implements OnInit {
   eliminarTransaccion(id: number): void {
     if (confirm('¿Seguro desea eliminar esta transacción?')) {
       this.transaccionService.eliminar(id).subscribe(() => {
-        this.cargarTransacciones();
+        this.refreshTransactionsWithFiltersIfNeeded();
       });
     }
   }
