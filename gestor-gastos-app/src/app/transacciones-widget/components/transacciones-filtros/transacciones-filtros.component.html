@@ -48,6 +48,7 @@
       Desde:
       <input type="date" [(ngModel)]="filtros.desde"
              name="desdeFecha"
+             [max]="filtros.hasta || today"
              (change)="onFiltroChange()"
              [disabled]="mostrarFormulario || mostrarComprobante" />
     </label>
@@ -55,6 +56,8 @@
       Hasta:
       <input type="date" [(ngModel)]="filtros.hasta"
              name="hastaFecha"
+             [min]="filtros.desde || ''"
+             [max]="today"
              (change)="onFiltroChange()"
              [disabled]="mostrarFormulario || mostrarComprobante" />
     </label>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,  Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -26,6 +26,8 @@ export class TransaccionesWidgetComponent implements OnInit {
   // En transacciones-container se agregó el atributo #contenedorTransacciones 
   @ViewChild('contenedorTransacciones', { static: false })
   contenedorTransacciones!: ElementRef;
+
+  @Input() bodyHeight!: number;
 
   transacciones: Transaccion[] = []; // arreglo para guardar lo que venga de la API
   mostrarFormulario: boolean = false;
@@ -96,10 +98,19 @@ export class TransaccionesWidgetComponent implements OnInit {
     ).subscribe({
       next: data => {
         this.transacciones = data;
-        setTimeout(() => this.scrollToTop(), 100); // Delay para que el DOM se actualice
+        // setTimeout(() => this.scrollToTop(), 100); // Delay para que el DOM se actualice
       },
       error: err => console.error('Error en búsqueda en tiempo real', err)
     });
+  }
+
+  private refreshTransactionsWithFiltersIfNeeded(): void {
+    const hayFiltros = Object.values(this.filtros).some(valor => !!valor);
+    if (hayFiltros || this.mostrarBuscador) {
+      this.onFiltroChange();
+    } else {
+      this.cargarTransacciones();
+    }
   }
 
   private scrollToTop(): void {  // Apunta al div transacciones-container
@@ -109,12 +120,12 @@ export class TransaccionesWidgetComponent implements OnInit {
         behavior: 'smooth'
       });
     }
-  } // Para mi este método no funciona bien. Pero bueno.
+  }
 
   cargarTransacciones(): void {
     this.transaccionService.obtenerTodas().subscribe(data => {
       this.transacciones = data;
-      setTimeout(() => this.scrollToTop(), 100);
+      // setTimeout(() => this.scrollToTop(), 100);
     });
   }
 
@@ -238,13 +249,9 @@ export class TransaccionesWidgetComponent implements OnInit {
       formData.append('ActualizarComprobante', 'false');
     }
 
-    //if (!this.usarFechaPersonalizada) {
-    //  formData.delete('fecha');
-    //}
-
     this.transaccionService.actualizar(this.editingId, formData).subscribe({
       next: () => {
-        this.cargarTransacciones();
+        this.refreshTransactionsWithFiltersIfNeeded();
         this.mostrarFormulario = false;
         this.editingId = null;
         this.tieneComprobanteExistente = false;
@@ -284,7 +291,7 @@ export class TransaccionesWidgetComponent implements OnInit {
   eliminarTransaccion(id: number): void {
     if (confirm('¿Seguro desea eliminar esta transacción?')) {
       this.transaccionService.eliminar(id).subscribe(() => {
-        this.cargarTransacciones();
+        this.refreshTransactionsWithFiltersIfNeeded();
       });
     }
   }
@@ -363,6 +370,7 @@ export class TransaccionesWidgetComponent implements OnInit {
       hasta: '',
       mimeType: ''
     };
+    setTimeout(() => this.scrollToTop(), 100);
     this.cargarTransacciones(); // vuelve al listado completo
   }
 

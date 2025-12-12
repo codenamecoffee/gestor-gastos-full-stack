@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './widget.component.html',
   styleUrl: './widget.component.scss'
 })
-export class WidgetComponent implements OnInit{
+export class WidgetComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Widget';
   @Input() minWidth: number = 200;
   @Input() minHeight: number = 200;
@@ -26,6 +26,12 @@ export class WidgetComponent implements OnInit{
   ngOnInit() {
     this.size = { width: this.minWidth, height: this.minHeight };
     this.position = { x: this.initialX, y: this.initialY };
+
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   private isDragging = false;
@@ -38,6 +44,27 @@ export class WidgetComponent implements OnInit{
   private startLeft = 0;  // Offset del widget en la pantalla.
   private startTop = 0;
   private dragOffset = { x: 0, y: 0 };
+
+  get bodyHeight(): number {
+    const headerHeight = 36;
+    return this.size.height - headerHeight;
+  }
+
+  onWindowResize = () => {
+  const margin = 16; // px
+  const maxWidth = Math.max(window.innerWidth - margin, this.minWidth);
+  const maxHeight = Math.max(window.innerHeight - margin, this.minHeight);
+
+  // Ajusta tamaño si es demasiado grande
+  this.size.width = Math.min(this.size.width, maxWidth);
+  this.size.height = Math.min(this.size.height, maxHeight);
+
+  // Ajusta posición si está fuera
+  const maxX = window.innerWidth - this.size.width;
+  const maxY = window.innerHeight - this.size.height;
+  this.position.x = Math.max(0, Math.min(this.position.x, maxX));
+  this.position.y = Math.max(0, Math.min(this.position.y, maxY));
+};
 
   // Dragging:
   startDrag(event: MouseEvent) {

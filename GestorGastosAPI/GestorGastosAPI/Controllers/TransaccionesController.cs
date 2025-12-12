@@ -57,6 +57,12 @@ namespace GestorGastosAPI.Controllers
             if (!string.IsNullOrWhiteSpace(hasta) && DateTime.TryParse(hasta, out var h))
                 fechaHasta = h;
 
+            // --- Date range validation ---
+            if (fechaDesde.HasValue && fechaHasta.HasValue && fechaDesde > fechaHasta)
+            {
+                return BadRequest(new { message = "The start date cannot be later than the end date." });
+            }
+
             try
             {
                 var resultado = await _transaccionService.Filtrar(descripcion, tipo, categoria, fechaDesde, fechaHasta, mimeType);
