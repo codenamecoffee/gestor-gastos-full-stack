@@ -12,6 +12,8 @@ import { FiltrosTransaccion } from '../../../services/transaccion.service';
   styleUrl: './transacciones-filtros.component.scss'
 })
 export class TransaccionesFiltrosComponent {
+  today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+
   // INPUTS - Recibe datos del padre
   @Input() mostrarFormulario: boolean = false;
   @Input() mostrarComprobante: boolean = false;
