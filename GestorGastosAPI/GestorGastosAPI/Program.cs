@@ -51,7 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //////////////////////////////////////////////////////
 
 // Usando inyección de dependencias de servicios personalizados.
-builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
 /////////////////////////////////////
