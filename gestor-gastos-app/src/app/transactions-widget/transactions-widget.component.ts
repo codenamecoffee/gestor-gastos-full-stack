@@ -12,9 +12,6 @@ import { TransactionCardComponent } from './components/transaction-card/transact
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 import { TRANSACTION_TYPES, CATEGORIES, TransactionTypeOption, CategoryOption } from './transaction-mappings';
 
-// // Define the type for transaction type options (Defined in both parent and child (form) components)
-// type TransactionTypeOption = { value: string; label: string };
-
 @Component({
   selector: 'app-transactions-widget',
   standalone: true,

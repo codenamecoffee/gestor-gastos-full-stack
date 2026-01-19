@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+// import { RouterOutlet } from '@angular/router';
 import { TransactionsWidgetComponent } from './transactions-widget/transactions-widget.component'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TransactionsWidgetComponent],
+  imports: [TransactionsWidgetComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
