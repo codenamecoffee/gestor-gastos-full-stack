@@ -1,10 +1,10 @@
-.filtros-container {
+.filters-container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-} // Esto es para recuperar el gap que tenía .acciones. Se perdió al modularizar el componente. 
+} // This is to restore the gap that .actions had. It was lost when modularizing the component.
 
-.filtros-acciones {
+.filters-actions {
   display: flex;
   gap: 0.5rem; // Horizontal
   width: 100%;

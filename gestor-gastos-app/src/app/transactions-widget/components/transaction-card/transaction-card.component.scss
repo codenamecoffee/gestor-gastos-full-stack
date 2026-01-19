@@ -1,16 +1,16 @@
 :host {
-  display: flex; // El componente es un flex container
+  display: flex; // The component is a flex container
   flex-direction: column;
-  height: 100%; // Ocupa toda la altura del grid item
+  height: 100%; // It occupies the entire height of the grid item
 }
 
 
-.transaccion-card {
+.transaction-card {
   background: #f8f8f8;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  flex: 1; // La card se expande para llenar el espacio
+  flex: 1; // The card expands to fill the space
   display: flex;
   flex-direction: column;
   margin: 0.5rem;
@@ -22,20 +22,20 @@
   gap: 0.5rem;
 }
 
-.btn-icono {
+.btn-icon {
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
 // .card-header {
-//   // Estilos adicionales a futuro.
+//   // Additional styles in the future.
 // }
 
 .card-body {
-  // Estilos adicionales a futuro.
+  // Additional styles in the future.
   flex: 1;
 }
 
 // .card-footer {
-//   // Estilos adicionales a futuro.
+//   // Additional styles in the future.
 // }

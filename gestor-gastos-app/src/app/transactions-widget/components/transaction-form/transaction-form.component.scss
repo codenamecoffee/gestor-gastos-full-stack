@@ -1,12 +1,12 @@
-.form-transaccion {
+.form-transaction {
   position: absolute;
-  top: 52px; // Debajo de la navbar
+  top: 52px; // Below the navbar
   left: 50%;
   transform: translateX(-50%);
   width: min(90%, 380px);
   max-height: calc(100% - 80px); 
   overflow-y: auto;
-  pointer-events: auto; // Re-habilita interacción con el formulario.
+  pointer-events: auto; // Re-enables interaction with the form.
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -18,14 +18,14 @@
   box-sizing: border-box;
  }
 
-.form-transaccion input,
-.form-transaccion select {
+.form-transaction input,
+.form-transaction select {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.form-transaccion button {
+.form-transaction button {
   padding: 0.5rem;
 }
 
@@ -67,6 +67,6 @@ small {
   }
 }
 
-.form-transaccion {
+.form-transaction {
   @include custom-scrollbar;
 }

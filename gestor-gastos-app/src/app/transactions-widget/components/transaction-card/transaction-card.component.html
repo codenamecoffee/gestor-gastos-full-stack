@@ -1,0 +1,25 @@
+<div class="transaction-card">
+  <div class="card-header">
+    <button class="btn-icon"
+            (click)="editTransaction()">
+      Editar
+    </button>
+    <button class="btn-icon"
+            (click)="deleteTransaction()">
+      Eliminar
+    </button>
+  </div>
+  <div class="card-body">
+    <h3>{{ transaction.description }}</h3>
+    <p><strong>Monto:</strong> {{ transaction.amount }} {{ transaction.currency }}</p>
+    <p><strong>Categoría:</strong> {{ getCategoryLabel(transaction.category) }} | <strong>Tipo:</strong> {{ getTypeLabel(transaction.type) }}</p>
+    <p><strong>Fecha:</strong> {{ formatDate(transaction.date) }} hs</p>
+  </div>
+  <div class="card-footer">
+    <button class="btn-secondary"
+            (click)="viewTransactionReceipt()"
+            [disabled]="!transaction.receipt">
+      Ver comprobante
+    </button>
+  </div>
+</div>

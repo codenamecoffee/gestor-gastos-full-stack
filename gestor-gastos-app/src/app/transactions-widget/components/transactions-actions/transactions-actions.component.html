@@ -1,0 +1,9 @@
+<div class="action-buttons">
+  <button (click)="showForm()"
+          [disabled]="isFormVisible || isReceiptVisible || isSearchVisible">
+    + Nueva transacción
+  </button>
+  <button (click)="viewSearchBar()" [disabled]="isFormVisible || isReceiptVisible || isSearchVisible">
+    Buscar
+  </button>
+</div>

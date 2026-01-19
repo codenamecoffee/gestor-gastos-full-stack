@@ -1,4 +1,4 @@
-.transacciones-widget-content {
+.transactions-widget-content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -7,14 +7,14 @@
 
 // (1) - Top layer: navbar
 
-.acciones {
+.actions {
   user-select: none;
   flex-shrink: 0;
   z-index: 20;
-  padding-top: 0.5rem; // Necesario para centrar
-  padding-inline: 0.8rem; // Necesario para que el color llegue a los costados
-  padding-bottom: 0.5rem; // Necesario para centrar
-  margin-bottom: 0.5rem; // Separar de la primera card
+  padding-top: 0.5rem; // Center alignment
+  padding-inline: 0.8rem; // Necessary for the color to reach the sides
+  padding-bottom: 0.5rem; // Center alignment
+  margin-bottom: 0.5rem; // Separate from the first card
 
   background: aliceblue;
   border-bottom-left-radius: 5px;
@@ -32,9 +32,9 @@
 }
 
 
-// (2) - Overlay layer: Encima de Middle layer pero sin participar del scroll.
+// (2) - Overlay layer: Above the Middle layer but not participating in the scroll.
 
-// 2.1 - Formulario para crear/editar transacciones
+// 2.1 - Form to create/edit transactions
 
 .form-overlay {
   position: absolute;
@@ -47,18 +47,18 @@
 }
 
 
-// 2.2 - Comprobante (Notar que el estilo base es igual al del formulario)
+// 2.2 - Receipt (Note that the base style is the same as the form's)
 
-.comprobante-overlay {
+.receipt-overlay {
   position: absolute;
   top: 52px;
   left: 0;
   right: 0;
   bottom: 5px;
-  z-index: 200; /* más que el formulario */
+  z-index: 200; /* more than the form */
   margin-inline: 0.8rem;
 
-  .contenedor-comprobante {
+  .receipt-container {
     position: absolute;
     top: 52px;
     left: 50%;
@@ -66,7 +66,7 @@
     width: min(90%, 100%);
     height: calc(100% - 100px);
     overflow: auto;
-    pointer-events: auto; // Habilita al botón de cerrar comprobante
+    pointer-events: auto; // Enables the close receipt button
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -77,9 +77,9 @@
     border: 1px solid black;
     box-sizing: border-box;
 
-    /* Distintos estilos según el tipo de comprobante: */
+    /* Different styles depending on the receipt type: */
 
-    // Para PDFs (iframe)
+    // For PDFs (iframe)
     iframe {
       width: 100%;
       height: 100%;
@@ -87,16 +87,16 @@
       border-radius: 8px;
     }
 
-    // Para imágenes
+    // For images
     img {
       max-width: 100%;
       max-height: 100%;
-      object-fit: contain; // Mantiene proporción sin recortar
+      object-fit: contain; // Keeps aspect ration without cropping the image.
       border-radius: 8px;
     }
 
-    // Para archivos de texto
-    .texto-container {
+    // For text files
+    .text-container {
       width: 100%;
       height: 100%;
       overflow: auto;
@@ -105,26 +105,26 @@
       padding: 1.5rem;
       box-sizing: border-box;
       display: flex;
-      align-items: flex-start; // Alineación desde arriba (más natural para texto)
-      justify-content: flex-start; // Alineado a la izquierda como párrafo
+      align-items: flex-start; // Alignment from top (more natural for text)
+      justify-content: flex-start; // Left-aligned as a paragraph
 
       pre {
-        white-space: pre-wrap; // Respeta saltos de línea pero ajusta texto
-        word-wrap: break-word; // Evita desbordamiento horizontal
+        white-space: pre-wrap; // Respect line breaks but wrap text
+        word-wrap: break-word; // Prevents horizontal overflow
         margin: 0;
 
-        // Fuente moderna tipo "ticket de supermercado":
+        // Modern "supermarket receipt" style font:
         font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
         font-size: 0.95rem;
-        line-height: 1.6; // Más espaciado para lectura cómoda
+        line-height: 1.6; // More spacing for comfortable reading
         text-align: left;
         width: 100%;
-        text-indent: 1rem; // Sangría para párrafos (simulando libros)
+        text-indent: 1rem; // Paragraph indentation (simulating book style)
       }
     }
   }
 
-  .btn-cerrar {
+  .btn-close {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -139,30 +139,30 @@
     transition: background 0.2s;
   }
 
-  .btn-cerrar:hover {
+  .btn-close:hover {
     background: #e60000;
     color: white;
   }
 }
 
-// (3) - Middle layer: Capa scrolleable para las cards.
+// (3) - Middle layer: Scrollable layer for the cards.
 
-.transacciones-container {
+.transactions-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.transacciones-container.blur, .form-overlay.blur {
+.transactions-container.blur, .form-overlay.blur {
   /*filter: blur(4px) brightness(0.8);*/
   filter: blur(4px);
-  pointer-events: none; // Evita que se interactúe con las cards mientras el formulario/comprobante está abierto.
-  user-select: none; // Evita que se seleccione texto de las cards mientras el formulario/comprobante está activo.
+  pointer-events: none; // Prevents interaction with cards while the form/receipt is open.
+  user-select: none; // Prevents text from being selected from cards while the form/receipt is active.
 }
 
 
-// (4) - Scrollbar para el navbar, el formulario y el comprobante
+// (4) - Scrollbar for the navbar, the form, and the receipt
 
 @mixin custom-scrollbar {
   &::-webkit-scrollbar {
@@ -184,14 +184,14 @@
   }
 }
 
-.acciones {
+.actions {
   @include custom-scrollbar;
 }
 
-.contenedor-comprobante {
+.receipt-container {
   @include custom-scrollbar;
 }
 
-.texto-container {
+.text-container {
   @include custom-scrollbar;
 }
