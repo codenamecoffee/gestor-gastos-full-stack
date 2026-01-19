@@ -1,0 +1,70 @@
+<!-- Search/filter form -->
+
+<div class="filters-container">
+
+  <div *ngIf="isSearchVisible" class="filters-actions">
+    <input type="text"
+           [(ngModel)]="filters.description"
+           (input)="onFilterChange()"
+           name="description"
+           placeholder="Buscar descripción..."
+           [disabled]="isFormVisible || isReceiptVisible" />
+
+    <button (click)="clear()"
+            [disabled]="isFormVisible || isReceiptVisible">Limpiar</button>
+    <button (click)="closeSearchBar()"
+            [disabled]="isFormVisible || isReceiptVisible">Cerrar</button>
+  </div>
+
+  <div *ngIf="isSearchVisible" class="filters-actions">
+    <select [(ngModel)]="filters.type" name="type"
+            (change)="onFilterChange()"
+            [disabled]="isFormVisible || isReceiptVisible">
+      <option value="">Todos los tipos</option>
+      <option value="Ingreso">Ingreso</option>
+      <option value="Gasto">Gasto</option>
+    </select>
+
+    <select [(ngModel)]="filters.category" name="category"
+            (change)="onFilterChange()"
+            [disabled]="isFormVisible || isReceiptVisible">
+      <option value="">Todas las categorías</option>
+      <option *ngFor="let category of categories" [value]="category.value">{{ category.label }}</option>
+    </select>
+
+    <select [(ngModel)]="filters.mimeType" name="mimeType"
+            (change)="onFilterChange()"
+            [disabled]="isFormVisible || isReceiptVisible">
+      <option value="">Todos los tipos de comprobante</option>
+      <option value="application/pdf">PDF</option>
+      <option value="image/png">Imagen (PNG)</option>
+      <option value="image/jpeg">Imagen (JPG)</option>
+      <option value="text/plain">Texto</option>
+    </select>
+  </div>
+
+  <div *ngIf="isSearchVisible" class="filters-actions">
+    <label>
+      Desde:
+      <input type="date" [(ngModel)]="filters.fromDate"
+             name="fromDate"
+             [max]="filters.toDate || today"
+             (change)="onFilterChange()"
+             [disabled]="isFormVisible || isReceiptVisible" />
+    </label>
+    <label>
+      Hasta:
+      <input type="date" [(ngModel)]="filters.toDate"
+             name="toDate"
+             [min]="filters.fromDate || ''"
+             [max]="today"
+             (change)="onFilterChange()"
+             [disabled]="isFormVisible || isReceiptVisible" />
+    </label>
+  </div>
+
+  <div *ngIf="isSearchVisible" class="filters-actions">
+    <!-- Minimum and maximum amounts?-->
+  </div>
+
+</div>

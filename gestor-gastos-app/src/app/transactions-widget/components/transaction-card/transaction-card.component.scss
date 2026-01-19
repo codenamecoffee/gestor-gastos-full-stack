@@ -1,0 +1,41 @@
+:host {
+  display: flex; // The component is a flex container
+  flex-direction: column;
+  height: 100%; // It occupies the entire height of the grid item
+}
+
+
+.transaction-card {
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex: 1; // The card expands to fill the space
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+// .card-header {
+//   // Additional styles in the future.
+// }
+
+.card-body {
+  // Additional styles in the future.
+  flex: 1;
+}
+
+// .card-footer {
+//   // Additional styles in the future.
+// }

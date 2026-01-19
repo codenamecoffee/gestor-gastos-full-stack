@@ -1,0 +1,13 @@
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+} // This is to restore the gap that .actions had. It was lost when modularizing the component.
+
+.filters-actions {
+  display: flex;
+  gap: 0.5rem; // Horizontal
+  width: 100%;
+  padding-bottom: 0.2rem;
+  scroll-behavior: smooth;
+}
