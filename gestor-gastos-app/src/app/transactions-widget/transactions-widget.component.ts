@@ -175,9 +175,16 @@ export class TransactionsWidgetComponent implements OnInit {
         if (err.error && typeof err.error === 'string') {
           alert(err.error);
         } else if (err.error?.errors) {
-          const mensajes = Object.values(err.error.errors).flat();
-          alert(mensajes.join('\n'));
-        } else {
+            // ValidationProblemDetails
+            const mensajes = Object.values(err.error.errors).flat();
+            alert(mensajes.join('\n'));
+        } else if (err.error?.detail) {
+            // ProblemDetails
+            alert(`[${err.status}] ${err.error.title}\n${err.error.detail}`);
+        } else if (err.error?.title) {
+            alert(`[${err.status}] ${err.error.title}`);
+        } 
+        else {
           alert("The transaction couldn't be created. Please check the fields.");
         }
       }
@@ -253,7 +260,13 @@ export class TransactionsWidgetComponent implements OnInit {
         } else if (err.error?.errors) {
           const mensajes = Object.values(err.error.errors).flat();
           alert(mensajes.join('\n'));
-        } else {
+        } else if (err.error?.detail) {
+          // ProblemDetails
+          alert(`[${err.status}] ${err.error.title}\n${err.error.detail}`);
+        } else if (err.error?.title) {
+          alert(`[${err.status}] ${err.error.title}`);
+        } 
+        else {
           alert("The transaction couldn't be updated. Please check the fields.");
         }
       }

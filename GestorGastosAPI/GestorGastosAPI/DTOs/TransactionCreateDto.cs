@@ -18,6 +18,7 @@ namespace GestorGastosAPI.DTOs
 
         [Required(ErrorMessage = "Amount is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Amount must be greater than 0.")]
+        // Remember to use '0,1' instead of '0.1' for entering decimal values close to 0.
         public decimal? Amount { get; set; }
 
         [Required(ErrorMessage = "Currency is required (e.g., UYU or USD).")]
