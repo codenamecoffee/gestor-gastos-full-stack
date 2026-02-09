@@ -6,39 +6,39 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using System.Text.Json.Serialization;
 
-// Crea un objeto WebApplicationBuilder
+// Creates a WebApplicationBuilder object
 var builder = WebApplication.CreateBuilder(args);
 /* 
-   - Carga configuración (de appsettings.json, variables de entorno, 
-     argumentos de línea de comando, etc).
+   - Loads configuration (from appsettings.json, environment variables, 
+     command line arguments, etc).
 
-   - Configura logging (por defecto usa Microsoft.Extensions.Logging).
+   - Configures logging (by default uses Microsoft.Extensions.Logging).
 
-   - Expone builder.Services, que es un contenedor de dependencias (DI container).
+   - Exposes builder.Services, which is a dependency container (DI container).
  
  */
 
 //////////////////////////////////////////////////////
-// 1) REGISTRO DE SERVICIOS EN EL CONTENEDOR DE DI //
+//  1) SERVICE REGISTRATION IN THE DI CONTAINER    //
 //////////////////////////////////////////////////////
 
-// AddControllers(): Habilita el uso de controladores y API endpoints.
+// AddControllers(): Enables the use of controllers and API endpoints.
 builder.Services.AddControllers();
 
-// AddJsonOptions(): (1) - mostrar enums como strings en lugar de int.
-//                 (2) - convertir fechas a UTC al enviarlas al front. 
+// AddJsonOptions(): (1) - display enums as strings instead of int.
+//                   (2) - convert dates to UTC when sending them to the frontend.  
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     options.JsonSerializerOptions.Converters.Add(new UtcDateTimeConverter());
 });
 
-/* -> Para que a la hora de mostrar enums, se muestre el nombre del campo
- y no el int asociado. Tanto en Swagger a la hora de hacer un post, como a la hora
-de recibir el body de la response en un get. */
+/* -> So that when displaying enums, the field name is shown
+ instead of the associated int. Both in Swagger when making a post, and when
+receiving the response body in a get. */
 
-// Configuraciones para permitir uploads grandes (ej: imágenes).
-// Para que la entidad Transacción pueda recibir imagenes reales.
+// Configurations to allow large uploads (e.g., images).
+// So that the Transaction entity can receive real images.
 builder.Services.Configure<IISServerOptions>(options =>
 {
     options.MaxRequestBodySize = int.MaxValue;
@@ -50,7 +50,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.ValueLengthLimit = int.MaxValue;
 });
 
-// Swagger (documentación y pruebas de la API).
+// Swagger (API documentation and testing).
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
     {
@@ -65,23 +65,23 @@ builder.Services.AddSwaggerGen(options =>
         options.EnableAnnotations();
     });
 
-// Base de datos: conexión a SQL Server usando EF Core.
+// Database: connection to SQL Server using EF Core.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 //////////////////////////////////////////////////////
-// Registramos nuestra primer interfaz y servicio. ///
+///////// Interface and service registration  ////////
 //////////////////////////////////////////////////////
 
-// Usando inyección de dependencias de servicios personalizados.
+// Using dependency injection for custom services.
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 /////////////////////////
-//// Configurar CORS ////
+///// Configure CORS ////
 /////////////////////////
 
-// Permitir que Angular (localhost:4200) consuma la API.
+// Allow Angular (localhost:4200) to consume the API.
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
@@ -99,11 +99,11 @@ builder.Services.AddCors(options =>
 
 
 //////////////////////////////////////////
-// 2) CONSTRUIR Y CONFIGURAR LA APP    //
+//// 2) BUILD AND CONFIGURE THE APP //////
 //////////////////////////////////////////
 
 
-// Importante hacer esto LUEGO de haber agregado todos los servicios (Los builder.services)
+// Important to do this AFTER adding all services (the builder.services)
 var app = builder.Build();
 
 
@@ -118,7 +118,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins); // CORS debe ir antes de MapControllers
+app.UseCors(MyAllowSpecificOrigins); // CORS must go before MapControllers
 
 app.UseAuthorization();
 
