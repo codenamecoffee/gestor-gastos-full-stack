@@ -68,7 +68,9 @@ namespace GestorGastosAPI.Controllers
             [FromQuery] string? category,
             [FromQuery] string? fromDate,
             [FromQuery] string? toDate,
-            [FromQuery] string? mimeType
+            [FromQuery] string? mimeType,
+            [FromQuery] decimal? minAmount,
+            [FromQuery] decimal? maxAmount
         )
         {
             DateTime? parsedFromDate = null;
@@ -113,10 +115,31 @@ namespace GestorGastosAPI.Controllers
                 });
             }
 
+            if (minAmount.HasValue && maxAmount.HasValue && minAmount > maxAmount)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid amount range.",
+                    Status = 400,
+                    Detail = "The minimum amount cannot be greater than the maximum amount."
+                });
+            }
+
+            if ((minAmount.HasValue && minAmount < 0) || (maxAmount.HasValue && maxAmount < 0))
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid amount filter.",
+                    Status = 400,
+                    Detail = "Amount filters cannot be negative."
+                });
+            }
+
             try
             {
                 //throw new Exception("Error simulation to test the 500 status code.");
-                var resultado = await _transactionService.FilterAsync(description, type, category, parsedFromDate, parsedToDate, mimeType);
+                var resultado = await _transactionService.FilterAsync(
+                    description, type, category, parsedFromDate, parsedToDate, mimeType, minAmount, maxAmount);
                 return Ok(resultado);
             }
             catch (Exception ex)

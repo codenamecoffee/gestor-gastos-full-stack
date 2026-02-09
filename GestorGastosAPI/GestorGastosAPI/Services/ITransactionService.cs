@@ -15,7 +15,9 @@ namespace GestorGastosAPI.Services
             string? category,
             DateTime? fromDate,
             DateTime? toDate,
-            string? mimeType
+            string? mimeType,
+            decimal? minAmount,
+            decimal? maxAmount
         );
 
         Task<Transactions> AddAsync(TransactionCreateDto dto);

@@ -31,7 +31,9 @@ namespace GestorGastosAPI.Services
             string? category,
             DateTime? fromDate,
             DateTime? toDate,
-            string? mimeType
+            string? mimeType,
+            decimal? minAmount,
+            decimal? maxAmount
         )
         {
             var query = _context.Transactions.AsQueryable();
@@ -57,6 +59,12 @@ namespace GestorGastosAPI.Services
 
             if (!string.IsNullOrWhiteSpace(mimeType))
                 query = query.Where(transaction => transaction.ReceiptMimeType == mimeType);
+
+            if (minAmount.HasValue)
+                query = query.Where(transaction => transaction.Amount >= minAmount.Value);
+
+            if (maxAmount.HasValue)
+                query = query.Where(transaction => transaction.Amount <= maxAmount.Value);
 
             return await query.ToListAsync();
         }
