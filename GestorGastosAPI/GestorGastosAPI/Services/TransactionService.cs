@@ -25,46 +25,46 @@ namespace GestorGastosAPI.Services
             return await _context.Transactions.FindAsync(id);
         }
 
-        public async Task<List<Transactions>> FilterAsync(
-            string? description,
-            string? type,
-            string? category,
-            DateTime? fromDate,
-            DateTime? toDate,
-            string? mimeType,
-            decimal? minAmount,
-            decimal? maxAmount
-        )
+        public async Task<List<Transactions>> FilterAsync(TransactionFilterDto filter)
         {
             var query = _context.Transactions.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(description))
-                query = query.Where(transaction => EF.Functions.Like(transaction.Description, $"%{description}%"));
+            DateTime? parsedFromDate = null;
+            DateTime? parsedToDate = null;
 
-            if (!string.IsNullOrWhiteSpace(type) && Enum.TryParse<TransactionType>(type, true, out var typeEnum))
-                query = query.Where(transaction => transaction.Type == typeEnum);
+            if (!string.IsNullOrWhiteSpace(filter.FromDate) && DateTime.TryParse(filter.FromDate, out var d))
+                parsedFromDate = d;
 
-            if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, true, out var categoryEnum))
-                query = query.Where(transaction => transaction.Category == categoryEnum);
+            if (!string.IsNullOrWhiteSpace(filter.ToDate) && DateTime.TryParse(filter.ToDate, out var h))
+                parsedToDate = h;
 
-            if (fromDate.HasValue)
-                query = query.Where(transaction => transaction.Date >= fromDate.Value);
+            if (!string.IsNullOrWhiteSpace(filter.Description))
+                query = query.Where(transaction => EF.Functions.Like(transaction.Description, $"%{filter.Description}%"));
 
-            if (toDate.HasValue)
+            if (filter.Type.HasValue)
+                query = query.Where(transaction => transaction.Type == filter.Type.Value);
+
+            if (filter.Category.HasValue)
+                query = query.Where(transaction => transaction.Category == filter.Category.Value);
+
+            if (parsedFromDate.HasValue)
+                query = query.Where(transaction => transaction.Date >= parsedFromDate.Value);
+
+            if (parsedToDate.HasValue)
             {
                 // Includes the whole day 'toDate'
-                var endOfDay = toDate.Value.Date.AddDays(1).AddTicks(-1);
-                query = query.Where(t => t.Date <= endOfDay);
+                var endOfDay = parsedToDate.Value.Date.AddDays(1).AddTicks(-1);
+                query = query.Where(transaction => transaction.Date <= endOfDay);
             }
 
-            if (!string.IsNullOrWhiteSpace(mimeType))
-                query = query.Where(transaction => transaction.ReceiptMimeType == mimeType);
+            if (!string.IsNullOrWhiteSpace(filter.MimeType))
+                query = query.Where(transaction => transaction.ReceiptMimeType == filter.MimeType);
 
-            if (minAmount.HasValue)
-                query = query.Where(transaction => transaction.Amount >= minAmount.Value);
+            if (filter.MinAmount.HasValue)
+                query = query.Where(transaction => transaction.Amount >= filter.MinAmount.Value);
 
-            if (maxAmount.HasValue)
-                query = query.Where(transaction => transaction.Amount <= maxAmount.Value);
+            if (filter.MaxAmount.HasValue)
+                query = query.Where(transaction => transaction.Amount <= filter.MaxAmount.Value);
 
             return await query.ToListAsync();
         }

@@ -1,9 +1,10 @@
 using GestorGastosAPI.Data;
 using GestorGastosAPI.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using GestorGastosAPI.Utils;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+using System.Text.Json.Serialization;
 
 // Crea un objeto WebApplicationBuilder
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +22,20 @@ var builder = WebApplication.CreateBuilder(args);
 // 1) REGISTRO DE SERVICIOS EN EL CONTENEDOR DE DI //
 //////////////////////////////////////////////////////
 
-// Habilita el uso de controladores y API endpoints.
+// AddControllers(): Habilita el uso de controladores y API endpoints.
 builder.Services.AddControllers();
+
+// AddJsonOptions(): (1) - mostrar enums como strings en lugar de int.
+//                 (2) - convertir fechas a UTC al enviarlas al front. 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.Converters.Add(new UtcDateTimeConverter());
+});
+
+/* -> Para que a la hora de mostrar enums, se muestre el nombre del campo
+ y no el int asociado. Tanto en Swagger a la hora de hacer un post, como a la hora
+de recibir el body de la response en un get. */
 
 // Configuraciones para permitir uploads grandes (ej: imágenes).
 // Para que la entidad Transacción pueda recibir imagenes reales.
@@ -39,7 +52,18 @@ builder.Services.Configure<FormOptions>(options =>
 
 // Swagger (documentación y pruebas de la API).
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Title = "Modular Productivity Dashboard API",
+            Version = "v1",
+            Description = "API for productivity management including finances, habits, and personal tracking modules"
+        });
+
+
+        options.EnableAnnotations();
+    });
 
 // Base de datos: conexión a SQL Server usando EF Core.
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -52,24 +76,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Usando inyección de dependencias de servicios personalizados.
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-
-
-/////////////////////////////////////
-// Formato para los JSON en HTTP ////
-/////////////////////////////////////
-
-// JSON: (1) - mostrar enums como strings en lugar de int.
-//       (2) - convertir fechas a UTC al enviarlas al front. 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.JsonSerializerOptions.Converters.Add(new UtcDateTimeConverter());
-});
-
-/* -> Para que a la hora de mostrar enums, se muestre el nombre del campo
- y no el int asociado. Tanto en Swagger a la hora de hacer un post, como a la hora
-de recibir el body de la response en un get. */
-
 
 /////////////////////////
 //// Configurar CORS ////

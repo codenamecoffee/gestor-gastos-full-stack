@@ -9,16 +9,7 @@ namespace GestorGastosAPI.Services
 
         Task<Transactions?> GetByIdAsync(int id);
 
-        Task<List<Transactions>> FilterAsync(
-            string? description,
-            string? type,
-            string? category,
-            DateTime? fromDate,
-            DateTime? toDate,
-            string? mimeType,
-            decimal? minAmount,
-            decimal? maxAmount
-        );
+        Task<List<Transactions>> FilterAsync(TransactionFilterDto filter);
 
         Task<Transactions> AddAsync(TransactionCreateDto dto);
 
