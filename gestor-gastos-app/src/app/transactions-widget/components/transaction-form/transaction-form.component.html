@@ -42,11 +42,6 @@
          accept=".png,.jpg,.jpeg,.pdf,.txt"
          [disabled]="!addReceipt || deleteReceipt" />
 
-  <!-- <select [(ngModel)]="newTransaction.type" name="type" required>
-    <option value="" disabled selected>Seleccionar tipo</option>
-    <option *ngFor="let type of transactionTypes" [value]="type"> {{ type }} </option>
-  </select> -->
-
   <select [(ngModel)]="newTransaction.type" name="type" required>
     <option value="" disabled selected>Seleccionar tipo</option>
     <option *ngFor="let type of transactionTypes" [value]="type.value">{{ type.label }}</option>

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionFilters } from '../../../services/transaction.service';
-import { CategoryOption } from '../../transaction-mappings';
+import { TransactionTypeOption, CategoryOption } from '../../transaction-mappings';
 
 @Component({
   selector: 'app-transactions-filters',
@@ -19,6 +19,7 @@ export class TransactionsFiltersComponent {
   @Input() isReceiptVisible: boolean = false;
   @Input() isSearchVisible: boolean = false;
   @Input() categories!: CategoryOption[];
+  @Input() transactionTypes!: TransactionTypeOption[];
   @Input() filters!: TransactionFilters;
 
   // OUTPUTS - Sends events to the parent

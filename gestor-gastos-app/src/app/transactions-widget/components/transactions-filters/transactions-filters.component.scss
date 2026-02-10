@@ -11,3 +11,11 @@
   padding-bottom: 0.2rem;
   scroll-behavior: smooth;
 }
+
+label {
+  text-wrap: nowrap;
+}
+
+input[type="number"] {
+  width: 120px;
+}
