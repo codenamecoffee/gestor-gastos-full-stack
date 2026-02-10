@@ -12,7 +12,7 @@ namespace GestorGastosAPI.DTOs
         public string? FromDate {  get; set; }
         public string? ToDate {  get; set; }
 
-        [SwaggerSchema(Description = "MIME type of the receipt file. Example: application/pdf, image/jpeg, image/png.")]
+        [SwaggerSchema(Description = "MIME type of the receipt file. Example: application/pdf, image/jpeg, image/png, text/plain (.txt).")]
         public string? MimeType {  get; set; }
         public decimal? MinAmount { get; set; }
         public decimal? MaxAmount { get; set; }

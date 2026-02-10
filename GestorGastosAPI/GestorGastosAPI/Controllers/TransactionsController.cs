@@ -138,7 +138,6 @@ namespace GestorGastosAPI.Controllers
                     detalle = ex.Message 
                 });
             }
-
         }
 
         [HttpGet("{id}/receipt")]
