@@ -8,55 +8,55 @@ namespace GestorGastosAPI.Data
         // Constructor
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // DbContextOptions es una clase
-        // <AppDbContext> es un tipo genérico, el cuál en este caso es nuestra clase.
-        // options es la instancia de la clase DbContextOptions.
-        // options es pasado por parámetro al constructor AppDbContext
-        // ':' indica una llamada explícita al constructor de la clase base, es decir, DbContext
-        // A dicha llamada exclusiva del método de la clase base, le pasamos el parámetro 'options'.
+        // DbContextOptions is a class
+        // <AppDbContext> is a generic type, which in this case is our class.
+        // options is the instance of the DbContextOptions class.
+        // options is passed as a parameter to the AppDbContext constructor.
+        // ':' indicates an explicit call to the base class constructor, that is, DbContext.
+        // In this exclusive call to the base class method, we pass the 'options' parameter.
 
-        public DbSet<Transaccion> Transacciones { get; set; }
 
-        // 'DbSet' es una clase de EntityFramework Core que representa una tabla de una base de datos.
-        // 'Transacciones' por lo tanto es una instancia de la clase DbSet que utiliza el tipo genérico 'Transaccion'
-        // La clase Transaccion es conocida gracias a el using GestorGastosAPI.Models
+        public DbSet<Transactions> Transactions { get; set; }
 
-        // LINQ parece ser la sintáxis que utiliza EntityFrameworCore para poder hacer lo que hace
-        // el lenguaje SQL pero en C#
+        // 'DbSet' is a class from EntityFramework Core that represents a database table.
+        // 'Transactions' is therefore an instance of the DbSet class that uses the generic type 'Transactions'.
+        // The class Transactions is known thanks to the using GestorGastosAPI.Models.
+
+        // LINQ seems to be the syntax that EntityFrameworkCore uses to do what SQL does, but in C#.
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
             base.OnModelCreating(modelBuilder);
-            // Llamamos al método OnModelCreating de la clase heredada 'DbContext' para que haga
-            // su configuración por defecto.
+            // We call the OnModelCreating method of the inherited 'DbContext' class so it performs its default configuration.
 
-            // - Sin embargo - podes agregar reglas que complementen:
+            // - However - you can add rules to complement:
 
-            modelBuilder.Entity<Transaccion>().Property(t => t.Descripcion).HasMaxLength(100);
-            // Le pone un límite de caracteres a la descripción (por ejemplo 100)
+            modelBuilder.Entity<Transactions>().Property(t => t.Description).HasMaxLength(100);
+            // Sets a character limit for the description (for example, 100).
 
-            modelBuilder.Entity<Transaccion>().Property(t => t.Monto).IsRequired();
-            // Hace que el campo 'Monto' no pueda ser nulo.
+            modelBuilder.Entity<Transactions>().Property(t => t.Amount).IsRequired();
+            // Makes the 'Amount' field required (cannot be null).
 
-            modelBuilder.Entity<Transaccion>().Property(t => t.Monto).HasColumnType("decimal(18,2)");
-            // Por defecto SQL Server usa algo como decimal(18,2) (18 dígitos totales, 2 decimales), pero EF no lo estaba
-            // configurando explícitamente, entonces te avisa que si metés un número muy grande o muy preciso
-            // (como 123456789012345.6789), puede truncarse o redondearse. Con ésta linea la advertencia en consola desaparece.
 
+            modelBuilder.Entity<Transactions>().Property(t => t.Amount).HasColumnType("decimal(18,2)");
+            // By default, SQL Server uses something like decimal(18,2) (18 total digits, 2 decimals), but EF was not
+            // configuring it explicitly, so it warns you that if you enter a very large or very precise number
+            // (like 123456789012345.6789), it may be truncated or rounded. With this line, the warning in the console disappears.
         }
 
-        // OnModelCreating es un método que es llamado automáticamente por Entity Framework cuando se está creando
-        // el modelo interno de cómo las clases se traducen a tablas. 
+        // OnModelCreating is a method that is automatically called by Entity Framework when the
+        // internal model of how classes are translated to tables is being created.
 
-        // El parámetro modelBuilder te permite configurar reglas y relaciones personalizadas, 
-        // como por ejemplo: cambiar el nombre de una tabla o columna, configurar relaciones
-        // (uno a muchos, muchos a muchos), agregar restricciones (campos requeridos, longitudes máximas, etc).
+        // The modelBuilder parameter allows you to configure custom rules and relationships,
+        // such as: changing the name of a table or column, configuring relationships
+        // (one-to-many, many-to-many), adding constraints (required fields, max lengths, etc.).
 
-        // Se le hace override al OnModelCreating para poder utilizar configuraciones personalizadas. 
+        // You override OnModelCreating to use custom configurations.
 
-        // Sino llamamos a base.OnModelCreating() podés estar saltándote configuraciones automáticas importantes
-        // que EF Core hace por vos, como inferir nombres de tablas, claves primarias, relaciones básicas, etc.
-        // Por eso se recomienda siempre dejarlo al principio del método, y luego poner mis reglas personalizadas,
-        // que - si es necesario - pueden sobreescribir la configuraición por defecto. 
+        // If you don't call base.OnModelCreating(), you might be skipping important automatic configurations
+        // that EF Core does for you, such as inferring table names, primary keys, basic relationships, etc.
+        // That's why it's recommended to always leave it at the beginning of the method, and then put your custom rules,
+        // which - if necessary - can overwrite the default configuration.
     }
 }

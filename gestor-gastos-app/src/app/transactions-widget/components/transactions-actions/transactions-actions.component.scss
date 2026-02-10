@@ -1,0 +1,11 @@
+.action-buttons {
+  display: flex;
+  gap: 0.5rem; // Horizontal
+  width: 100%;
+  padding-bottom: 0.2rem;  // This style needs to be dynamic. (If Search only)
+  scroll-behavior: smooth;
+}
+
+.action-buttons button {
+  white-space: nowrap; /* Prevents line breaks in button text */
+}

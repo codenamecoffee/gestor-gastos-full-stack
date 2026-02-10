@@ -1,0 +1,80 @@
+<h2>Transaction List</h2>
+
+<app-widget title="Transactions" [minWidth]="285" [minHeight]="340" #widgetRef>
+  <div class="transactions-widget-content" [style.height.px]="widgetRef.bodyHeight">
+    <div class="actions">
+      <app-transactions-actions
+        [isFormVisible]="isFormVisible"
+        [isReceiptVisible]="isReceiptVisible" 
+        [isSearchVisible]="isSearchVisible"
+        (newTransaction)="showForm()"
+        (openSearchBar)="viewSearchBar()">
+      </app-transactions-actions>
+      <app-transactions-filters
+        *ngIf="isSearchVisible"
+        [isFormVisible]="isFormVisible"
+        [isReceiptVisible]="isReceiptVisible"
+        [isSearchVisible]="isSearchVisible"
+        [categories]="categories"
+        [transactionTypes]="transactionTypes"
+        [filters]="filters"
+        (filterChange)="onFilterChange()"
+        (clearFilters)="clean()"
+        (closeFilters)="closeSearchBar()">
+      </app-transactions-filters>
+    </div>    
+
+    <!-- Cards -->
+
+    <div class="transactions-container" #transactionsContainer [class.blur]="isFormVisible || isReceiptVisible">
+      <app-transaction-card
+        *ngFor="let transaction of transactions"
+        [transaction]="transaction"
+        (edit)="editTransaction($event)"
+        (delete)="deleteTransaction($event)"
+        (viewReceipt)="viewReceipt($event)">
+      </app-transaction-card>
+    </div>
+
+  </div>
+
+  <!-- Creation/edit form -->
+  
+  <div *ngIf="isFormVisible" class="form-overlay" [class.blur]="isReceiptOverForm">
+    <app-transaction-form
+      [newTransaction]="newTransaction"
+      [categories]="categories"
+      [transactionTypes]="transactionTypes"
+      [editingId]="editingId"
+      [useCustomDate]="useCustomDate"
+      (useCustomDateChange)="useCustomDate = $event"
+      [hasReceipt]="hasReceipt"
+      [addReceipt]="addReceipt"
+      [deleteReceipt]="deleteReceipt"
+      (deleteReceiptChange)="deleteReceipt = $event"
+      (addReceiptChange)="addReceipt = $event"
+      [isSubmitting]="isProcessing"
+
+      (submit)="onSubmit()"
+      (cancel)="cancelCreation()"
+      (viewReceipt)="viewReceipt($event, true)"
+      (fileSelected)="onFileSelected($event)">
+    </app-transaction-form>
+  </div>
+
+  <!-- Comprobante -->
+
+  <div class="receipt-overlay" *ngIf="isReceiptVisible">
+    <div class="receipt-container">
+      <button class="btn-close" (click)="closeReceipt()">✕</button>
+      <!-- PDF -->
+      <iframe *ngIf="isPDF() && receiptUrl" [src]="receiptUrl"></iframe>
+      <!-- Imagen -->
+      <img *ngIf="isImage() && receiptUrl" [src]="receiptUrl" />
+      <!-- Texto -->
+      <div *ngIf="isText()" class="text-container">
+        <pre>{{ textContent }}</pre>
+      </div>
+    </div>
+  </div>
+</app-widget>

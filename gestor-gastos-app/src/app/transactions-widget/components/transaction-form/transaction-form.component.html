@@ -1,0 +1,97 @@
+<form (ngSubmit)="onSubmit()" class="form-transaction">
+
+  <label *ngIf="editingId && hasReceipt">
+    <input type="checkbox"
+           name="deleteReceipt"
+           [(ngModel)]="deleteReceipt"
+           (change)="onDeleteReceiptChange($event)"
+           [disabled]="addReceipt" />
+    Eliminar comprobante existente
+  </label>
+
+  <!-- We display the current file name (if desired) -->
+  <small *ngIf="editingId && hasReceipt && !deleteReceipt">
+    Comprobante actual:
+    <button *ngIf="editingId && hasReceipt"
+            type="button"
+            (click)="viewTransactionReceipt()">
+      Ver comprobante
+    </button>
+  </small>
+
+  <label>
+    <input type="checkbox"
+           name="addReceipt"
+           [(ngModel)]="addReceipt"
+           (change)="onAddReceiptChange($event)"
+           [disabled]="deleteReceipt" />
+    {{
+     editingId && hasReceipt
+                ? 'Reemplazar comprobante'
+                : 'Agregar comprobante (opcional)'
+    }}
+  </label>
+
+  <small *ngIf="editingId && !hasReceipt && !newTransaction.receipt">
+    No se encontró un comprobante para esta transacción.
+  </small>
+
+  <input type="file"
+         name="addReceipt"
+         (change)="onFileSelected($event)"
+         accept=".png,.jpg,.jpeg,.pdf,.txt"
+         [disabled]="!addReceipt || deleteReceipt" />
+
+  <select [(ngModel)]="newTransaction.type" name="type" required>
+    <option value="" disabled selected>Seleccionar tipo</option>
+    <option *ngFor="let type of transactionTypes" [value]="type.value">{{ type.label }}</option>
+  </select>
+
+  <input type="text"
+         placeholder="Moneda (UY/U$S)"
+         [(ngModel)]="newTransaction.currency"
+         name="currency"
+         required />
+
+  <label class="label-input">
+    Monto:
+    <input type="number"
+           placeholder="Monto"
+           [(ngModel)]="newTransaction.amount"
+           name="amount"
+           required />
+  </label>
+
+  <label>
+    <input type="checkbox"
+           name="useCustomDate"
+           [(ngModel)]="useCustomDate"
+           (change)="onUseCustomDateChange($event)" />
+    Agregar fecha y hora personalizados  :
+  </label>
+
+  <input type="datetime-local"
+         name="date"
+         [(ngModel)]="newTransaction.date"
+         [disabled]="!useCustomDate" />
+
+  <small [hidden]="!useCustomDate">
+    Haz click en el ícono del calendario por mayor facilidad.
+  </small>
+
+  <input type="text"
+         placeholder="Descripción (Máx: 200 caracteres)"
+         [(ngModel)]="newTransaction.description"
+         name="description"
+         required />
+
+  <select [(ngModel)]="newTransaction.category" name="category" required>
+    <option value="" disabled selected>Seleccionar categoría</option>
+    <option *ngFor="let category of categories" [value]="category.value"> {{ category.label }} </option>
+  </select>
+
+  <button type="submit" [disabled]="isSubmitting">
+    {{ editingId ? 'Guardar cambios' : 'Crear transacción' }}
+  </button>
+  <button type="button" (click)="cancelCreation()">Cancelar</button>
+</form>

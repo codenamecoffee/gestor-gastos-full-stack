@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './widget.component.html',
   styleUrl: './widget.component.scss'
 })
-export class WidgetComponent implements OnInit{
+export class WidgetComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Widget';
   @Input() minWidth: number = 200;
   @Input() minHeight: number = 200;
@@ -17,15 +17,20 @@ export class WidgetComponent implements OnInit{
   @Input() initialX: number = 100;
   @Input() initialY: number = 100;
 
-  // Definite assignment assertion: '!' (En position! y size!)
-  // => Le aseguramos a Angular/TS, que las propiedades serán inicializadas
-  // antes de utilizarse.
+  // Definite assignment assertion: '!' (In position! and size!)
+  // => We assure Angular/TS that the properties will be initialized before being used.
   position!: { x: number; y: number };
   size!: { width: number; height: number };
 
   ngOnInit() {
     this.size = { width: this.minWidth, height: this.minHeight };
     this.position = { x: this.initialX, y: this.initialY };
+
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   private isDragging = false;
@@ -33,11 +38,32 @@ export class WidgetComponent implements OnInit{
   private resizeDirection: string | null = null;
   private startWidth = 0;
   private startHeight = 0;
-  private startMouseX = 0;  // Punto en donde se hizo el mousedown.
+  private startMouseX = 0;  // Point where mousedown occurred.
   private startMouseY = 0;
-  private startLeft = 0;  // Offset del widget en la pantalla.
+  private startLeft = 0;  // Widget offset on the screen.
   private startTop = 0;
   private dragOffset = { x: 0, y: 0 };
+
+  get bodyHeight(): number {
+    const headerHeight = 36;
+    return this.size.height - headerHeight;
+  }
+
+  onWindowResize = () => {
+  const margin = 16; // px
+  const maxWidth = Math.max(window.innerWidth - margin, this.minWidth);
+  const maxHeight = Math.max(window.innerHeight - margin, this.minHeight);
+
+  // Adjust size if it's too large
+  this.size.width = Math.min(this.size.width, maxWidth);
+  this.size.height = Math.min(this.size.height, maxHeight);
+
+  // Adjust position if it's out of bounds
+  const maxX = window.innerWidth - this.size.width;
+  const maxY = window.innerHeight - this.size.height;
+  this.position.x = Math.max(0, Math.min(this.position.x, maxX));
+  this.position.y = Math.max(0, Math.min(this.position.y, maxY));
+};
 
   // Dragging:
   startDrag(event: MouseEvent) {
@@ -45,7 +71,7 @@ export class WidgetComponent implements OnInit{
 
     this.isDragging = true;
 
-    // Calcula el offset entre el mouse y la esquina del widget
+    // Calculate the offset between the mouse and the widget's corner
     this.dragOffset.x = event.clientX - this.position.x;
     this.dragOffset.y = event.clientY - this.position.y;
 
@@ -57,16 +83,16 @@ export class WidgetComponent implements OnInit{
   onDrag = (event: MouseEvent) => {  
     if (!this.isDragging) return;
 
-    // Calculamos la nueva posición del mouse pero aplicando el dragOffset
+    // Calculate the new mouse position applying the dragOffset
     const newX = event.clientX - this.dragOffset.x;
     const newY = event.clientY - this.dragOffset.y;
 
-    // Límites: El máximo X e Y que pueden alcanzar el borde izq y el borde sup del widget
+    // Limits: The maximum X and Y that the left/top edge of the widget can reach
     const maxX = window.innerWidth - this.size.width;
     const maxY = window.innerHeight - this.size.height;
 
-    // max entre 0 y ... para que no se vaya por el borde izquierdo o superior
-    // min entre newX y maxX ... para que no se vaya por el borde derecho o inferior
+    // max between 0 and ... so it doesn't go past the left/top edge
+    // min between newX and maxX ... so it doesn't go past the right/bottom edge
     this.position.x = Math.max(0, Math.min(newX, maxX));
     this.position.y = Math.max(0, Math.min(newY, maxY));
   }
@@ -82,7 +108,7 @@ export class WidgetComponent implements OnInit{
   // Resizing:
   startResize(event: MouseEvent, direction: string) {
     this.isResizing = true;
-    this.resizeDirection = direction; // necesitamos guardar qué handle se tocó
+    this.resizeDirection = direction; // we need to save which handle was touched
     this.startMouseX = event.clientX;
     this.startMouseY = event.clientY;
     this.startWidth = this.size.width;
@@ -202,34 +228,34 @@ export class WidgetComponent implements OnInit{
         break;
     }
 
-    // Evitamos que se salga del viewport (Igual que en onDrag)
+    // Prevent the widget from going outside the viewport (same as in onDrag)
     const maxWidth = window.innerWidth - newLeft;
     const maxHeight = window.innerHeight - newTop;
 
     newWidth = Math.min(newWidth, maxWidth);
     newHeight = Math.min(newHeight, maxHeight);
 
-    // Límites para izquierda y arriba del navegador:
+    // Limits for the left and top of the browser:
 
-    if (newLeft < 0) { // Si fuesemos a tener un x < 0
-      newWidth += newLeft;  // Frena en el borde izquierdo. (Pensar que se ejecuta en cada pixel).
-      newLeft = 0;  // Reubicamos el borde izquierdo.
+    if (newLeft < 0) { // If we were to have x < 0
+      newWidth += newLeft;  // Stops at the left edge. (Think that this runs at every pixel).
+      newLeft = 0;  // Reposition the left edge.
     }
 
-    if (newTop < 0) {  // Si fuesemos a tener un y < 0
-      newHeight += newTop;  // Frena en el borde superior.
-      newTop = 0;  // Reubicamos el borde superior.
+    if (newTop < 0) {  // If we were to have y < 0
+      newHeight += newTop;  // Stops at the top edge.
+      newTop = 0;  // Reposition the top edge.
     }
 
-    /* Ni el width ni el height llegan a crecer fuera del borde izq o sup debido a
-    los propios x e y que como toman valores negativos, detienen su crecimiento frenando
-    exactamente a los width y height en los bordes izquierdo y superior respectivamente. */
+    /* Neither width nor height grow outside the left or top edge due to
+    x and y themselves, which as they take negative values, stop their growth
+    exactly at the left and top edges respectively. */
 
-    // Evitar que el ancho/alto se vuelvan negativos
+    // Prevent width/height from becoming negative
     newWidth = Math.max(newWidth, this.minWidth);
     newHeight = Math.max(newHeight, this.minHeight);
 
-    // Aplicamos los cambios finales
+    // Apply the final changes
     this.size.width = newWidth;
     this.size.height = newHeight;
     this.position.x = newLeft;

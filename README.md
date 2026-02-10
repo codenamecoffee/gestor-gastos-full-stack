@@ -291,6 +291,13 @@ showcasing the project’s evolution toward a professional, scalable, and data-d
 
 <br>
 
+## 📋 Issue & PR Templates
+
+This project uses standardized templates for issues and pull requests, located in the `.github` directory.  
+These templates help me keep my workflow organized and consistent when reporting bugs, planning features, or submitting code changes.
+
+<br>
+
  ## 👨‍💻 Author
 
 > **Federico González Lage** —
