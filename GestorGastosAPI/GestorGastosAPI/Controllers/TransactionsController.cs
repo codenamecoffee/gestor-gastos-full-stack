@@ -63,21 +63,34 @@ namespace GestorGastosAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Transactions>>> Filter(
-            [FromQuery] string? description,
-            [FromQuery] string? type,
-            [FromQuery] string? category,
-            [FromQuery] string? fromDate,
-            [FromQuery] string? toDate,
-            [FromQuery] string? mimeType
-        )
+            [FromQuery] TransactionFilterDto filter)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value != null && x.Value.Errors.Count > 0)
+                    .Select(x => new { Field = x.Key, Errors = x.Value!.Errors.Select(e => e.ErrorMessage) });
+
+                Console.WriteLine("Validation errors: ");
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Field: {error.Field}");
+                    foreach (var msg in error.Errors)
+                    {
+                        Console.WriteLine($"  - {msg}");
+                    }
+                }
+                return BadRequest(ModelState);
+            }
+
             DateTime? parsedFromDate = null;
             DateTime? parsedToDate = null;
 
-            if (!string.IsNullOrWhiteSpace(fromDate) && DateTime.TryParse(fromDate, out var d))
+            if (!string.IsNullOrWhiteSpace(filter.FromDate) && DateTime.TryParse(filter.FromDate, out var d))
                 parsedFromDate = d;
 
-            if (!string.IsNullOrWhiteSpace(toDate) && DateTime.TryParse(toDate, out var h))
+            if (!string.IsNullOrWhiteSpace(filter.ToDate) && DateTime.TryParse(filter.ToDate, out var h))
                 parsedToDate = h;
 
             // --- Date range validation ---
@@ -91,32 +104,30 @@ namespace GestorGastosAPI.Controllers
                 });
             }
 
-
-            // Prevents the API from accepting invalid transaction types or categories in query parameters.
-            if (!string.IsNullOrWhiteSpace(type) && !Enum.TryParse<TransactionType>(type, out _))
+            if (filter.MinAmount.HasValue && filter.MaxAmount.HasValue && filter.MinAmount > filter.MaxAmount)
             {
                 return BadRequest(new ProblemDetails
                 {
-                    Title = "Invalid transaction type.",
+                    Title = "Invalid amount range.",
                     Status = 400,
-                    Detail = $"Invalid transaction type: {type}"
+                    Detail = "The minimum amount cannot be greater than the maximum amount."
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(category) && !Enum.TryParse<Category>(category, out _))
+            if ((filter.MinAmount.HasValue && filter.MinAmount < 0) || (filter.MaxAmount.HasValue && filter.MaxAmount < 0))
             {
                 return BadRequest(new ProblemDetails
                 {
-                    Title = "Invalid category.",
+                    Title = "Invalid amount filter.",
                     Status = 400,
-                    Detail = $"Invalid category: {category}"
+                    Detail = "Amount filters cannot be negative."
                 });
             }
 
             try
             {
                 //throw new Exception("Error simulation to test the 500 status code.");
-                var resultado = await _transactionService.FilterAsync(description, type, category, parsedFromDate, parsedToDate, mimeType);
+                var resultado = await _transactionService.FilterAsync(filter);
                 return Ok(resultado);
             }
             catch (Exception ex)
@@ -127,7 +138,6 @@ namespace GestorGastosAPI.Controllers
                     detalle = ex.Message 
                 });
             }
-
         }
 
         [HttpGet("{id}/receipt")]

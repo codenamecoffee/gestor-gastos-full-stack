@@ -21,6 +21,8 @@ export interface TransactionFilters {  // For filters in transactions-widget.com
   fromDate: string;
   toDate: string;
   mimeType: string;
+  minAmount: number | null;
+  maxAmount: number | null;
 };
 
 @Injectable({
@@ -38,8 +40,22 @@ export class TransactionService {
   }
 
   // Filter transactions
+  // filter(filters: any): Observable<any> {
+  //   const params = new HttpParams({ fromObject: filters });
+  //   return this.http.get(`${this.apiUrl}/filter`, { params });
+  // }
+
   filter(filters: any): Observable<any> {
-    const params = new HttpParams({ fromObject: filters });
+    let params = new HttpParams();
+    
+    // Solo agregar parámetros que no sean null, undefined o string vacío
+    Object.keys(filters).forEach(key => {
+      const value = filters[key];
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.set(key, value.toString());
+      }
+    });
+    
     return this.http.get(`${this.apiUrl}/filter`, { params });
   }
 

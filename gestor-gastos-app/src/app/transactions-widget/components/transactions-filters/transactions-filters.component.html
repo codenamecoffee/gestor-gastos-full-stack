@@ -18,11 +18,10 @@
 
   <div *ngIf="isSearchVisible" class="filters-actions">
     <select [(ngModel)]="filters.type" name="type"
-            (change)="onFilterChange()"
-            [disabled]="isFormVisible || isReceiptVisible">
+        (change)="onFilterChange()"
+        [disabled]="isFormVisible || isReceiptVisible">
       <option value="">Todos los tipos</option>
-      <option value="Ingreso">Ingreso</option>
-      <option value="Gasto">Gasto</option>
+      <option *ngFor="let type of transactionTypes" [value]="type.value">{{ type.label }}</option>
     </select>
 
     <select [(ngModel)]="filters.category" name="category"
@@ -64,7 +63,22 @@
   </div>
 
   <div *ngIf="isSearchVisible" class="filters-actions">
-    <!-- Minimum and maximum amounts?-->
+    <label>
+      Monto mínimo:
+      <input type="number" [(ngModel)]="filters.minAmount"
+            name="minAmount"
+            min="0"
+            (input)="onFilterChange()"
+            [disabled]="isFormVisible || isReceiptVisible" />
+    </label>
+    <label>
+      Monto máximo:
+      <input type="number" [(ngModel)]="filters.maxAmount"
+             name="maxAmount"
+             min="0"
+             (input)="onFilterChange()"
+             [disabled]="isFormVisible || isReceiptVisible" />
+    </label>
   </div>
 
 </div>

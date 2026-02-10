@@ -67,7 +67,9 @@ export class TransactionsWidgetComponent implements OnInit {
     category: '',
     fromDate: '',
     toDate: '',
-    mimeType: ''
+    mimeType: '',
+    minAmount: null,
+    maxAmount: null
   };
 
   constructor(
@@ -367,7 +369,9 @@ export class TransactionsWidgetComponent implements OnInit {
       category: '',
       fromDate: '',
       toDate: '',
-      mimeType: ''
+      mimeType: '',
+      minAmount: null,
+      maxAmount: null
     };
     setTimeout(() => this.scrollToTop(), 100);
     this.loadTransactions(); // return to the full list
@@ -385,9 +389,11 @@ export class TransactionsWidgetComponent implements OnInit {
   }
 
   onFilterChange(): void {
-    const filtersCleaned: Partial<TransactionFilters> = {};
+    const filtersCleaned: any = {};
     (Object.keys(this.filters) as Array<keyof TransactionFilters>).forEach(key => {
-      if (this.filters[key]) filtersCleaned[key] = this.filters[key];
+      if (this.filters[key] !== undefined && this.filters[key] !== '') {
+        filtersCleaned[key] = this.filters[key];
+      }
     });
     this.searchSubject.next(filtersCleaned);
   }
